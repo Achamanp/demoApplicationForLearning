@@ -11,39 +11,46 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.E_CommerceApplication.entity.Role;
 //import com.E_CommerceApplication.entity.Role;
 import com.E_CommerceApplication.entity.User;
 import com.E_CommerceApplication.exception.ResourceNotFoundException;
 import com.E_CommerceApplication.pagination.UserPageResponse;
 import com.E_CommerceApplication.payloads.UserDto;
+import com.E_CommerceApplication.repository.RoleRepository;
 //import com.E_CommerceApplication.repository.RoleRepository;
 import com.E_CommerceApplication.repository.UserRepository;
+import com.E_CommerceApplication.service.UserInfoDetail;
 //import com.E_CommerceApplication.service.UserInfoDetail;
 import com.E_CommerceApplication.service.UserService;
 @Service
 @Primary
-public class UserServiceImpl implements UserService/*,UserDetailsService*/{
+public class UserServiceImpl implements UserService,UserDetailsService{
 	@Autowired
 	private ModelMapper modelMapper;
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private UserRepository userRepository;
-//    @Autowired
-//    private RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
     @Override
-    public UserDto createUser(UserDto userDto/*, Integer roleId*/) {
-//    	 Role role = this.roleRepository.findById(roleId)
-//    	            .orElseThrow(() -> new ResourceNotFoundException("Role", "Role ID", roleId));
+    public UserDto createUser(UserDto userDto, Integer roleId) {
+    	 Role role = this.roleRepository.findById(roleId)
+   	            .orElseThrow(() -> new ResourceNotFoundException("Role", "Role ID", roleId));
     	        User user = this.modelMapper.map(userDto, User.class);
-    	      //  user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-//    	        user.getRoles().add(role);
+    	        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+    	        user.getRoles().add(role);
     	        User savedUser = this.userRepository.save(user);
     	        return this.modelMapper.map(savedUser, UserDto.class);
     }
@@ -55,7 +62,7 @@ public class UserServiceImpl implements UserService/*,UserDetailsService*/{
 		user.setEmail(userDto.getEmail());
 		user.setMobileNumber(userDto.getMobileNumber());
 		user.setName(userDto.getName());
-		user.setPassword(/*this.passwordEncoder.encode*/(userDto.getPassword()));
+		user.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
 		User updatedUser = this.userRepository.save(user);
 		return this.modelMapper.map(updatedUser, UserDto.class);
 	}
@@ -92,11 +99,12 @@ public class UserServiceImpl implements UserService/*,UserDetailsService*/{
 		User user = this.userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User", "User Id", id));
 		this.userRepository.delete(user);
 	}
-//	@Override
-//	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//		Optional<User> user = this.userRepository.findByName(username);
-//		return user.map(UserInfoDetail::new)
-//				.orElseThrow(()-> new UsernameNotFoundException("User name not found"+ username));
-//	}
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Optional<User> user = this.userRepository.findByName(username);
+		return user.map(UserInfoDetail::new)
+				.orElseThrow(()-> new UsernameNotFoundException("User name not found"+ username));
+	}
+
 
 }

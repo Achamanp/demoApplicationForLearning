@@ -1,11 +1,24 @@
 package com.E_CommerceApplication.payloads;
 
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class UserDto {
 	private Integer id;
+	 @Size(max = 50, message = "Name should not be longer than 50 characters")
 	private String name;
+	 @Email(message = "Email should be valid")
+	    @NotBlank(message = "Email is mandatory")
+	    @Column(unique = true)
 	private String email;
+	 @NotBlank(message = "Mobile number is mendatory")
 	private String mobileNumber;
+	 @NotBlank
 	private String address;
+	 @NotBlank(message = "Password is mandatory")
+	    @Size(min = 8, message = "Password should have at least 8 characters")
 	private String password;
 	
 	public String getName() {

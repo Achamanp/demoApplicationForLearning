@@ -1,20 +1,29 @@
 package com.E_CommerceApplication.entity;
-
-import org.antlr.v4.runtime.misc.NotNull;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 @Entity
 public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private Integer rating;
-	private String comment;
+
+    @NotNull(message = "Rating is mandatory")
+    @Min(value = 1, message = "Rating must be at least 1")
+    @Max(value = 5, message = "Rating must be at most 5")
+    private Integer rating;
+
+    @NotBlank(message = "Comment is mandatory")
+    @Size(max = 500, message = "Comment should not be longer than 500 characters")
+    private String comment;
 	@ManyToOne
 	private Product product;
 	@ManyToOne(cascade = CascadeType.ALL)

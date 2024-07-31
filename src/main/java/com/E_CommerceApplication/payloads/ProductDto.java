@@ -1,13 +1,36 @@
 package com.E_CommerceApplication.payloads;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class ProductDto {
 	private Integer id;
-	private String name;
-	private String description;
-	private String stock;
+
+    @NotBlank(message = "Name is mandatory")
+    @Size(max = 100, message = "Name should not be longer than 100 characters")
+    private String name;
+
+    @Size(max = 500, message = "Description should not be longer than 500 characters")
+    private String description;
+
+    @NotNull(message = "Quantity is mandatory")
+    @Min(value = 0, message = "Quantity must be at least 0")
+    private Integer quantity;
+
+    @NotNull(message = "Price is mandatory")
+    @Positive(message = "Price must be positive")
+    private double price;
+
+    @NotBlank(message = "Stock is mandatory")
+    private String stock;
+
+    @NotBlank(message = "Brand is mandatory")
+    @Size(max = 50, message = "Brand should not be longer than 50 characters")
+    private String brand;
 	private CategoryDto category;
-	private String brand;
 	public String getBrand() {
 		return brand;
 	}
@@ -20,7 +43,6 @@ public class ProductDto {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-	private Integer quantity;
 
 	public CategoryDto getCategory() {
 		return category;
@@ -28,7 +50,6 @@ public class ProductDto {
 	public void setCategory(CategoryDto category) {
 		this.category = category;
 	}
-	private double price;
 	public double getPrice() {
 		return price;
 	}

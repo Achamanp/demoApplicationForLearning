@@ -1,10 +1,18 @@
 package com.E_CommerceApplication.payloads;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 public class OrderedItemDto {
 	private Integer id; 
-	private Integer quantity;
-	private Integer price;
+
+    @NotNull(message = "Quantity is mandatory")
+    @Min(value = 0, message = "Quantity must be at least 0")
+    private Integer quantity;
+
+    @NotNull(message = "Price is mandatory")
+    @Min(value = 0, message = "Price must be at least 0")
+    private Integer price;
 	
 	private ProductDto product;
 	public Integer getId() {

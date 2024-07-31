@@ -1,7 +1,10 @@
 package com.E_CommerceApplication.payloads;
 
+import jakarta.validation.constraints.Positive;
+
 public class CartItemDto {
 	private Integer id;
+	@Positive
 	private Integer quantity;
 	private ProductDto product;
 	private CartDto cart;

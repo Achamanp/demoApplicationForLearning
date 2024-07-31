@@ -2,11 +2,18 @@ package com.E_CommerceApplication.payloads;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 public class ShippingDto {
 	private Integer id;
-	private LocalDateTime shippingDate;
-	private LocalDateTime deliverDate;
-	private Integer trackingNumber;
+	 @NotNull(message = "Shipping date is mandatory")
+		private LocalDateTime shippingDate;
+		 @NotNull(message = "Deliver date is mandatory")
+		private LocalDateTime deliverDate;
+		 @NotNull(message = "Tracking number is mandatory")
+		    @Min(value = 1, message = "Tracking number must be greater than 0")
+		private Integer trackingNumber;
 	private OrderDto order;
 	public Integer getId() {
 		return id;

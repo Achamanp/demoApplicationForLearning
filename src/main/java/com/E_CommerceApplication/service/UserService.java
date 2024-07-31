@@ -10,7 +10,7 @@ import com.E_CommerceApplication.payloads.UserDto;
 @Service
 @Qualifier
 public interface UserService {
-        public UserDto createUser(UserDto userDto);
+        public UserDto createUser(UserDto userDto,Integer roleId);
         public UserDto updateUser(UserDto userDto , Integer id );
         public UserDto getUserById(Integer id );
         public UserPageResponse getAllUser(Integer pageNumber, Integer pageSize, String sortBy,String sortDir);

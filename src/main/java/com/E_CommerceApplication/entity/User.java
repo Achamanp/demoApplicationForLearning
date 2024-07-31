@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,16 +14,28 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	@NotBlank(message =  "Name can not be Blank")
+	 @Size(max = 50, message = "Name should not be longer than 50 characters")
 	private String name;
+	 @Email(message = "Email should be valid")
+	    @NotBlank(message = "Email is mandatory")
+	    @Column(unique = true)
 	private String email;
+	 @NotBlank(message = "Password is mandatory")
+	    @Size(min = 8, message = "Password should have at least 8 characters")
 	private String password;
+	 @NotBlank(message = "Mobile number is mendatory")
 	private String mobileNumber;
+	 @NotBlank
 	private String address;
 	@OneToMany(mappedBy = "user")
 	private List<Order> order;
@@ -34,19 +47,19 @@ public class User {
 	public void setReview(List<Review> review) {
 		this.review = review;
 	}
-//	@ManyToMany(fetch = FetchType.EAGER)
-//	    @JoinTable(
-//	        name = "user_role",
-//	        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-//	        inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
-//	    )
-//	    private Set<Role> roles = new HashSet<>();
-//	public Set<Role> getRoles() {
-//		return roles;
-//	}
-//	public void setRoles(Set<Role> roles) {
-//		this.roles = roles;
-//	}
+	@ManyToMany(fetch = FetchType.EAGER)
+	    @JoinTable(
+	        name = "user_role",
+	        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+	        inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+	    )
+	    private Set<Role> roles = new HashSet<>();
+	public Set<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 
 	public String getName() {
 		return name;

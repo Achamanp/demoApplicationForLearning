@@ -4,14 +4,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Brand {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	private String name;
-	private String description;
+
+    @NotBlank(message = "Name is mandatory")
+    @Size(max = 100, message = "Name should not be longer than 100 characters")
+    private String name;
+
+    @Size(max = 500, message = "Description should not be longer than 500 characters")
+    private String description;
 	public Integer getId() {
 		return id;
 	}

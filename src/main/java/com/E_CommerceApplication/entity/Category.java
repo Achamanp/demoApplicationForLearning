@@ -9,6 +9,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.util.List;
 
 @Entity
@@ -18,9 +21,12 @@ public class Category {
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
 	    
+
+	    @NotBlank(message = "Name is mandatory")
+	    @Size(max = 100, message = "Name should not be longer than 100 characters")
 	    private String name;
-	    
-	    @Column(length = 1000)
+
+	    @Size(max = 500, message = "Description should not be longer than 500 characters")
 	    private String description;
 	    @OneToMany(mappedBy = "category")
 	    private List<Product> products;

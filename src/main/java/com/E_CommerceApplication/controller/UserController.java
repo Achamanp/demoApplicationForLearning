@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.E_CommerceApplication.pagination.UserPageResponse;
@@ -13,14 +14,14 @@ import com.E_CommerceApplication.payloads.UserDto;
 import com.E_CommerceApplication.service.UserService;
 
 @RestController
-//@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
-    @PostMapping("/adduser")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-       UserDto users = this.userService.createUser(userDto);
+    @PostMapping("/role/{id}")
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto,@PathVariable Integer id) {
+       UserDto users = this.userService.createUser(userDto, id);
       return new ResponseEntity<UserDto>(users,HttpStatus.CREATED);
     }
        
@@ -38,6 +39,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserPageResponse> getAllUsers(
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize,
@@ -47,12 +49,10 @@ public class UserController {
         return new ResponseEntity<UserPageResponse>(response,HttpStatus.OK);
         
     }
-
     @DeleteMapping("/{id}")
+    
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return new ResponseEntity<ApiResponse>(new ApiResponse("User Deleted Successfully", true),HttpStatus.NO_CONTENT);
     }
-   
-    
 }
