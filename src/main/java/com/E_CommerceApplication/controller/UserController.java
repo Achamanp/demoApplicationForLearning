@@ -24,8 +24,6 @@ public class UserController {
        UserDto users = this.userService.createUser(userDto, id);
       return new ResponseEntity<UserDto>(users,HttpStatus.CREATED);
     }
-       
-
     @PutMapping("/{id}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Integer id, @RequestBody UserDto userDto) {
         UserDto updatedUser = userService.updateUser(userDto, id);
@@ -39,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN_USER')")
     public ResponseEntity<UserPageResponse> getAllUsers(
             @RequestParam(defaultValue = "0") Integer pageNumber,
             @RequestParam(defaultValue = "10") Integer pageSize,
@@ -50,7 +48,7 @@ public class UserController {
         
     }
     @DeleteMapping("/{id}")
-    
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return new ResponseEntity<ApiResponse>(new ApiResponse("User Deleted Successfully", true),HttpStatus.NO_CONTENT);

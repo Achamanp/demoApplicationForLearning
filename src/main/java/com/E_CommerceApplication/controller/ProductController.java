@@ -3,6 +3,7 @@ package com.E_CommerceApplication.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.E_CommerceApplication.impl.ProductServiceImpl;
@@ -18,12 +19,14 @@ public class ProductController {
     private ProductServiceImpl productServiceImpl;
 
     @PostMapping("/category/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto, @PathVariable Integer id) {
         ProductDto createProductDto = productServiceImpl.createProduct(productDto, id);
         return new ResponseEntity<>(createProductDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductDto> updateProduct(@RequestBody ProductDto productDto, @PathVariable Integer id) {
         ProductDto updatedProduct = productServiceImpl.updateProduct(productDto, id);
         return ResponseEntity.ok(updatedProduct);
@@ -57,6 +60,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Integer id) {
        this.productServiceImpl.deleteProduct(id);
        return new ResponseEntity<ApiResponse>(new ApiResponse("Product Deleted Successfully", true),HttpStatus.OK);

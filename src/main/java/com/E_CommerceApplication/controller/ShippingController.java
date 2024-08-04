@@ -7,6 +7,7 @@ import com.E_CommerceApplication.pagination.ShippingPageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class ShippingController {
     private ShippingServiceImpl shippingServiceImpl;
 
     @PostMapping("/{orderId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShippingDto> createShipping(@RequestBody ShippingDto shippingDto,
                                                       @PathVariable Integer orderId) {
         ShippingDto createdShipping = shippingServiceImpl.createShipping(shippingDto, orderId);
@@ -24,6 +26,7 @@ public class ShippingController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShippingDto> updateShipping(@RequestBody ShippingDto shippingDto,
                                                       @PathVariable Integer id) {
         ShippingDto updatedShipping = shippingServiceImpl.updateShipping(shippingDto, id);
@@ -31,18 +34,21 @@ public class ShippingController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShippingDto> getShippingById(@PathVariable Integer id) {
         ShippingDto shippingDto = shippingServiceImpl.getShippingById(id);
         return new ResponseEntity<>(shippingDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteShipping(@PathVariable Integer id) {
         shippingServiceImpl.deleteShipping(id);
         return new ResponseEntity<>(new ApiResponse("Shipping deleted successfully", true),HttpStatus.NO_CONTENT);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShippingPageResponse> getAllShippings(
             @RequestParam(value = "pageSize", required = false) Integer pageSize,
             @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
@@ -60,6 +66,7 @@ public class ShippingController {
     }
 
     @GetMapping("/order/{orderId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ShippingPageResponse> getShippingByOrderId(
             @PathVariable Integer orderId,
             @RequestParam(value = "pageSize", required = false) Integer pageSize,

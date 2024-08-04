@@ -3,6 +3,7 @@ package com.E_CommerceApplication.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.E_CommerceApplication.impl.CategoryServiceImpl;
@@ -18,12 +19,14 @@ public class CategoryController {
     private CategoryServiceImpl categoryService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
         CategoryDto createCategoryDto = categoryService.createCategory(categoryDto);
         return new ResponseEntity<>(createCategoryDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable Integer id) {
         CategoryDto updatedCategory = categoryService.updateCategory(categoryDto, id);
         return ResponseEntity.ok(updatedCategory);
@@ -46,6 +49,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Integer id) {
         this.categoryService.deleteCategory(id);
         return new ResponseEntity<ApiResponse>(new ApiResponse("Category Deleted Successfully",true),HttpStatus.OK);

@@ -7,6 +7,7 @@ import com.E_CommerceApplication.pagination.BrandPageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,12 +18,14 @@ public class BrandController {
     private BrandServiceImpl brandServiceImpl;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BrandDto> createBrand(@RequestBody BrandDto brandDto) {
         BrandDto createdBrand = brandServiceImpl.createBrand(brandDto);
         return ResponseEntity.ok(createdBrand);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BrandDto> updateBrand(@RequestBody BrandDto brandDto, @PathVariable Integer id) {
         BrandDto updatedBrand = brandServiceImpl.updateBrand(brandDto, id);
         return ResponseEntity.ok(updatedBrand);
@@ -35,6 +38,7 @@ public class BrandController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> deleteBrand(@PathVariable Integer id) {
         brandServiceImpl.deleteBrand(id);
         return new ResponseEntity<ApiResponse>(new ApiResponse("Brand RemovedSuccessfully", true),HttpStatus.OK);

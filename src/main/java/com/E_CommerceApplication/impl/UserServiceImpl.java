@@ -15,10 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.E_CommerceApplication.entity.Role;
@@ -39,7 +35,7 @@ public class UserServiceImpl implements UserService,UserDetailsService{
 	@Autowired
 	private ModelMapper modelMapper;
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 	@Autowired
 	private UserRepository userRepository;
     @Autowired

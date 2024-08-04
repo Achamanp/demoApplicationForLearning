@@ -7,6 +7,7 @@ import com.E_CommerceApplication.pagination.ReviewPageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class ReviewController {
     private ReviewServiceImpl reviewServiceImpl;
 
     @PostMapping("/user/{userId}/product/{productId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ReviewDto> createReview(
             @RequestBody ReviewDto reviewDto,
             @PathVariable("userId") Integer userId,
@@ -26,6 +28,7 @@ public class ReviewController {
     }
 
     @PutMapping("/{reviewId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ReviewDto> updateReview(
             @PathVariable Integer reviewId,
             @RequestBody ReviewDto reviewDto) {
@@ -34,6 +37,7 @@ public class ReviewController {
     }
 
     @GetMapping("/{reviewId}")
+    
     public ResponseEntity<ReviewDto> getReviewById(@PathVariable Integer reviewId) {
         ReviewDto reviewDto = reviewServiceImpl.getReviewById(reviewId);
         return new ResponseEntity<>(reviewDto, HttpStatus.OK);
@@ -50,6 +54,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{reviewId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse> deleteReview(@PathVariable Integer reviewId) {
         reviewServiceImpl.deleteReview(reviewId);
         return new ResponseEntity<ApiResponse>(new ApiResponse("Review Deleted Successfully", true),HttpStatus.NO_CONTENT);

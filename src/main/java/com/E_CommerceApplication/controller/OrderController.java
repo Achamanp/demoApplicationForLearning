@@ -3,6 +3,7 @@ package com.E_CommerceApplication.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.E_CommerceApplication.impl.OrderServiceImpl;
@@ -42,6 +43,7 @@ public class OrderController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderPaginationResponse> getAllOrders(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,

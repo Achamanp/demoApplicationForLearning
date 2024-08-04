@@ -3,6 +3,7 @@ package com.E_CommerceApplication.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.E_CommerceApplication.impl.OrderedItemServiceImpl;
@@ -42,6 +43,7 @@ public class OrderedItemController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderedItemPageResponse> getAllOrderedItems(
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
@@ -52,6 +54,7 @@ public class OrderedItemController {
     }
 
     @GetMapping("/product/{productId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrderedItemPageResponse> getOrderedItemsByProductId(
             @PathVariable Integer productId,
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
